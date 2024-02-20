@@ -5,7 +5,7 @@ metadata:
   labels:
     app: postgres
 spec:
-  storageClassName: manual
+  storageClassName: oci # oracle cloud NFS
   accessModes:
     # This is just dangerous - this will basically created shared network volume (single one) for all the deployments
     - ReadWriteMany
