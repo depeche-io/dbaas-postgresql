@@ -1,0 +1,37 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+configMapGenerator:
+- behavior: merge
+  literals:
+  - exec.enabled=true
+  # Ignore reconciledAt, since by itself it doesn't indicate any important change.
+  - resource.ignoreResourceUpdatesEnabled=true
+  - |
+    resource.customizations.ignoreResourceUpdates.argoproj.io_Application=jsonPointers:
+    - /status/reconciledAt
+  - |
+    resource.customizations.ignoreResourceUpdates.ceph.rook.io_CephCluster=jsonPointers:
+    - /status/ceph
+    - /status/conditions
+  name: argocd-cm
+
+- behavior: merge
+  literals:
+    - |
+      policy.csv=p, role:user, applications, get, */*, allow
+      p, role:user, applications, sync, */*, allow
+      p, role:user, applications, delete, */*, allow
+      p, role:user, clusters, get, *, allow
+      p, role:user, repositories, get, *, allow
+      p, role:user, exec, create, */*, allow
+      
+      p, role:admin, exec, create, */*, allow
+      g, ArgoCDUser, role:user
+      g, ArgoCDAdmin, role:admin
+  name: argocd-rbac-cm
+
+kind: Kustomization
+namespace: argocd
+resources:
+- github.com/argoproj-labs/argocd-autopilot/manifests/base?ref=v0.4.17
+patchesStrategicMerge:
+- role-with-exec.yaml
