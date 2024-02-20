@@ -5,7 +5,7 @@ metadata:
   labels:
     app: postgres
 spec:
-  storageClassName: oci-bv # oracle cloud block volume
+  #storageClassName: oci-bv # default for Oracle Kubernetes Engine (OKE): oracle cloud block volume
   accessModes:
     # This is just dangerous - this will basically created shared network volume (single one) for all the deployments
     #- ReadWriteMany

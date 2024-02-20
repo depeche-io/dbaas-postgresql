@@ -26,6 +26,7 @@ spec:
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
               name: postgresdata
+              subPath: pgdata # fixed startup
           # resource limits and much more missing...
       volumes:
         # NOTE - this volume is SHARED among ALL the deployments
