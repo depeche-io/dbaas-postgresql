@@ -8,7 +8,13 @@ spec:
   storageClassName: oci # oracle cloud NFS
   accessModes:
     # This is just dangerous - this will basically created shared network volume (single one) for all the deployments
-    - ReadWriteMany
+    #- ReadWriteMany
+
+    # this would work, BUT this will incorrectly enable to start only Pods on a single node (still making a mistake of sharing a volume)
+    #- ReadWriteOnce
+    
+    # this works correctly, BUT this will allow only single replica of the Deployment to be started
+    - ReadWriteOncePod
   resources:
     requests:
       storage: 10Gi
