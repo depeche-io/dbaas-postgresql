@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: part1-bitnami-only-primary
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://charts.bitnami.com/bitnami
+    targetRevision: 15.4.0
+    chart: postgresql
+    helm:
+      releaseName: main
+      values: |
+        readReplicas.replicaCount: 0
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: part1-bitnami-only-primary
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+    syncOptions:
+      - CreateNamespace=true
