@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: checker-{{ .Values.name }}
+  labels:
+    app: checker-{{ .Values.name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: checker-{{ .Values.name }}
+  template:
+    metadata:
+      labels:
+        app: checker-{{ .Values.name }}
+    spec:
+      containers:
+        - name: app
+          image: depecheio/postgresql-data-loss-checker:v0.1.0
+          #imagePullPolicy: Always
+          ports:
+            - name: metrics
+              containerPort: 9090
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: 0.2
+            limits:
+              memory: "128Mi"
+              cpu: 1.0
+          env:
+            - name: TZ
+              value: GMT
+            - name: HOST
+              value: {{ .Values.connection.host }}
+            - name: USER
+              value: postgres
+            - name: PORT
+              value: "5432"
+            - name: PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: postgres-password
+                  name: main-postgresql
+            - name: MODE
+              value: single
+
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: checker-{{ .Values.name }}
+spec:
+  selector:
+    matchLabels:
+      app: checker-{{ .Values.name }}
+  podMetricsEndpoints:
+  - port: metrics

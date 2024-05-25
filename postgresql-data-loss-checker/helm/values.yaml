@@ -1,0 +1,6 @@
+
+name: first
+replicaCount: 1
+
+connection:
+  host: main-postgresql

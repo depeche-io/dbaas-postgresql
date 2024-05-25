@@ -1,0 +1,4 @@
+apiVersion: v2
+name: postgresql-data-loss-checker
+version: 0.1.0
+type: application
