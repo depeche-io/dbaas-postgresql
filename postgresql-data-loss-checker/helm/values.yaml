@@ -4,3 +4,4 @@ replicaCount: 1
 
 connection:
   host: main-postgresql
+  sslmode: disable

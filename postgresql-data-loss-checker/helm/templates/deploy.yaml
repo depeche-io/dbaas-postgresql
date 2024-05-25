@@ -44,6 +44,8 @@ spec:
                   name: main-postgresql
             - name: MODE
               value: single
+            - name: SSLMODE
+              value: ""
 
 ---
 apiVersion: monitoring.coreos.com/v1

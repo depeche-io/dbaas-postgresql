@@ -79,8 +79,13 @@ func getPsqlInfo() string {
 	user := os.Getenv("USER")
 	password := os.Getenv("PASSWORD")
 	dbname := os.Getenv("DBNAME")
+	sslmode := os.Getenv("SSLMODE")
 
-	return fmt.Sprintf("host=%s port=%d user=%s "+"password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
+	if sslmode != "" {
+		sslmode = "sslmode=" + sslmode
+	}
+
+	return fmt.Sprintf("host=%s port=%d user=%s "+"password=%s dbname=%s %s", host, port, user, password, dbname, sslmode)
 }
 
 func otelContext() (context.Context, api.Meter) {
