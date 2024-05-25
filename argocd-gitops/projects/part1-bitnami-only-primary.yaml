@@ -39,6 +39,10 @@ spec:
     helm:
       releaseName: main
       values: |
+        auth.postgresPassword: mypass
+        auth.username: app
+        auth.password: mypass
+        auth.database: app
 
 
   destination:
