@@ -14,6 +14,10 @@ spec:
       values: |
         readReplicas.replicaCount: 0
         metrics.enabled: true
+        auth.postgresPassword: mypass
+        auth.username: app
+        auth.password: mypass
+        auth.database: app
 
   destination:
     server: https://kubernetes.default.svc
@@ -39,10 +43,6 @@ spec:
     helm:
       releaseName: main
       values: |
-        auth.postgresPassword: mypass
-        auth.username: app
-        auth.password: mypass
-        auth.database: app
 
 
   destination:
