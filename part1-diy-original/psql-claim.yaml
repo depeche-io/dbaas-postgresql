@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-volume-claim
+  labels:
+    app: postgres
+spec:
+  #storageClassName: oci-bv # default for Oracle Kubernetes Engine (OKE): oracle cloud block volume
+  accessModes:
+    # This is just dangerous - this will basically created shared network volume (single one) for all the deployments
+    #- ReadWriteMany
+
+    # this would work, BUT this will incorrectly enable to start only Pods on a single node (still making a mistake of sharing a volume)
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi

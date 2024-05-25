@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+spec:
+  # !!! This is completely wrong - use of the Deployment will boot 3 different containers with the same shared ./pgdata dir
+  # so you have 3 completely separate Postgres processes writing over each other. Probably corrupting data in the first minute.
+  replicas: 3
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: 'postgres:14' # this will not keep you on the same minor version (14.x) and will bump you randomly as new minor version is released
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - configMapRef:
+                name: postgres-secret
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgresdata
+              subPath: pgdata # fixed startup
+          # resource limits and much more missing...
+      volumes:
+        # NOTE - this volume is SHARED among ALL the deployments
+        - name: postgresdata
+          persistentVolumeClaim:
+            claimName: postgres-volume-claim
