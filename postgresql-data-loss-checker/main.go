@@ -133,12 +133,22 @@ func singleConnection(psqlInfo string, counters Counters) {
 func insertSelectIteration(db *sql.DB, counters Counters) {
 	time.Sleep(sleepMillis * time.Millisecond)
 
+	lastWritten := 0
+	err := db.QueryRow("SELECT MAX(mynumber) FROM ledger WHERE myident = $1", myIdent).Scan(&lastWritten)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	if lastWrittenCount > 0 && lastWritten != lastWrittenCount {
+		counters.SelectDiffCounter.Add(counters.Ctx, float64(lastWrittenCount-lastWritten), counters.Opt)
+	}
+
 	sqlStatement := `
 			INSERT INTO ledger(myident, mynumber, app_insert_timestamp)
 			VALUES ($1, $2, $3)
 		`
 	myCounter += 1
-	err := db.QueryRow(sqlStatement, myIdent, myCounter, time.Now()).Scan()
+	err = db.QueryRow(sqlStatement, myIdent, myCounter, time.Now()).Scan()
 	counters.InsertCounter.Add(counters.Ctx, float64(1), counters.Opt)
 	if err != sql.ErrNoRows {
 		counters.FailedCounter.Add(counters.Ctx, float64(1), counters.Opt)
@@ -148,15 +158,6 @@ func insertSelectIteration(db *sql.DB, counters Counters) {
 		lastWrittenCount = myCounter
 	}
 
-	lastWritten := 0
-	err = db.QueryRow("SELECT MAX(mynumber) FROM ledger WHERE myident = $1", myIdent).Scan(&lastWritten)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	if lastWritten != lastWrittenCount {
-		counters.SelectDiffCounter.Add(counters.Ctx, float64(lastWrittenCount-lastWritten), counters.Opt)
-	}
 }
 
 func createTable(psqlInfo string) {

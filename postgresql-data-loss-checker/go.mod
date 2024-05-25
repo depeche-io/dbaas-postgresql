@@ -1,6 +1,6 @@
-module postgresql-data-loss-checker/main
+module github.com/depeche-io/dbaas-postgresql.git/postgresql-data-loss-checker/main
 
-go 1.21.3
+go 1.22.3
 
 require (
 	github.com/lib/pq v1.10.9
