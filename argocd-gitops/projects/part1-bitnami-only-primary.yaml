@@ -13,6 +13,7 @@ spec:
       releaseName: main
       values: |
         readReplicas.replicaCount: 0
+        metrics.enabled: true
 
   destination:
     server: https://kubernetes.default.svc
