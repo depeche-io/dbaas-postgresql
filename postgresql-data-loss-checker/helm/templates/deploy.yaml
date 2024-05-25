@@ -45,7 +45,7 @@ spec:
             - name: MODE
               value: single
             - name: SSLMODE
-              value: ""
+              value: "disable"
 
 ---
 apiVersion: monitoring.coreos.com/v1
