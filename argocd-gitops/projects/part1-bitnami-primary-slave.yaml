@@ -12,7 +12,6 @@ spec:
     helm:
       releaseName: main
       values: |
-        readReplicas.replicaCount: 1
         metrics.enabled: true
 
   destination:
