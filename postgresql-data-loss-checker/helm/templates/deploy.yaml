@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: app
-          image: depecheio/postgresql-data-loss-checker:v0.1.0
+          image: depecheio/postgresql-data-loss-checker:{{ .Values.tag }}
           #imagePullPolicy: Always
           ports:
             - name: metrics
