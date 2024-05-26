@@ -141,7 +141,7 @@ func insertSelectIteration(db *sql.DB, counters Counters) {
 	time.Sleep(sleepMillis * time.Millisecond)
 
 	lastWritten := 0
-	err := db.QueryRow("SELECT MAX(mynumber) FROM ledger WHERE myident = $1", myIdent).Scan(&lastWritten)
+	err := db.QueryRow("SELECT COALESCE(MAX(mynumber), 0) FROM ledger WHERE myident = $1", myIdent).Scan(&lastWritten)
 	if err != nil {
 		fmt.Println(err)
 		return
