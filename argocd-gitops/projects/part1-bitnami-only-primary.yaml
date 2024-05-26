@@ -14,10 +14,10 @@ spec:
       values: |
         readReplicas.replicaCount: 0
         metrics.enabled: true
-        global.postgresql.auth.postgresPassword: mypass
-        global.postgresql.auth.username: app
-        global.postgresql.auth.password: mypass
-        global.postgresql.auth.database: app
+        postgresql.auth.postgresPassword: mypass
+        postgresql.auth.username: app
+        postgresql.auth.password: mypass
+        postgresql.auth.database: app
 
   destination:
     server: https://kubernetes.default.svc
