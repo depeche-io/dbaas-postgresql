@@ -15,7 +15,8 @@ spec:
         readReplicas.replicaCount: 0
         metrics.enabled: true
         name: main
-
+        auth:
+          postgresPassword: secretpassword
   destination:
     server: https://kubernetes.default.svc
     namespace: part1-bitnami-only-primary
@@ -40,8 +41,7 @@ spec:
     helm:
       releaseName: main
       values: |
-
-
+        name: primary
   destination:
     server: https://kubernetes.default.svc
     namespace: part1-bitnami-only-primary

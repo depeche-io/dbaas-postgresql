@@ -69,6 +69,8 @@ spec:
       values: |
         name: slave
         readOnly: "true"
+        auth:
+          postgresPassword: secretpassword
         connection:
           host: main-postgresql-read
 
