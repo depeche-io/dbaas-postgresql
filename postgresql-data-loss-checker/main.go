@@ -198,7 +198,8 @@ func insertSelectIteration(db *sql.DB, counters Counters) {
 func createTable(psqlInfo string) {
 	db, err := sql.Open("postgres", psqlInfo)
 	if err != nil {
-		panic(err)
+		log.Println(err)
+		return
 	}
 	defer db.Close()
 
@@ -213,7 +214,7 @@ func createTable(psqlInfo string) {
 	`
 	err = db.QueryRow(sqlStatement).Scan()
 	if err != sql.ErrNoRows {
-		panic(err)
+		log.Println(err)
 	}
 }
 
