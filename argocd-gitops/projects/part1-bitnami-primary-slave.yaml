@@ -37,10 +37,11 @@ spec:
     targetRevision: main
     path: postgresql-data-loss-checker/helm
     helm:
-      releaseName: main
+      releaseName: primary
       values: |
-        connection.host: main-postgresql-primary
         name: primary
+        connection:
+          host: main-postgresql-primary
 
   destination:
     server: https://kubernetes.default.svc
@@ -64,10 +65,11 @@ spec:
     targetRevision: main
     path: postgresql-data-loss-checker/helm
     helm:
-      releaseName: main
+      releaseName: slave
       values: |
-        connection.host: main-postgresql-read
         name: slave
+        connection:
+          host: main-postgresql-read
 
   destination:
     server: https://kubernetes.default.svc
