@@ -55,6 +55,8 @@ spec:
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
+  labels:
+    release: prometheus
   name: checker-{{ .Values.name }}
 spec:
   selector:
