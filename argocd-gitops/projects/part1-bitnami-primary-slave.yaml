@@ -24,3 +24,55 @@ spec:
       prune: true
     syncOptions:
       - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: part1-bitnami-primary-slave-cp
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/depeche-io/dbaas-postgresql.git
+    targetRevision: main
+    path: postgresql-data-loss-checker/helm
+    helm:
+      releaseName: main
+      values: |
+        connection.host: main-postgresql-primary
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: part1-bitnami-primary-slave
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: part1-bitnami-primary-slave-cs
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/depeche-io/dbaas-postgresql.git
+    targetRevision: main
+    path: postgresql-data-loss-checker/helm
+    helm:
+      releaseName: main
+      values: |
+        connection.host: main-postgresql-read
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: part1-bitnami-primary-slave
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+    syncOptions:
+      - CreateNamespace=true

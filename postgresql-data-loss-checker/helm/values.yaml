@@ -1,6 +1,8 @@
-tag: v0.1.3
+tag: v0.1.5
 name: first
 replicaCount: 1
+
+readOnly: "false"
 
 connection:
   host: main-postgresql

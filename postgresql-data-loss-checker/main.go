@@ -25,13 +25,17 @@ const (
 var myIdent = time.Now().UnixNano()
 var myCounter = 0
 var lastWrittenCount = 0
+var prevSelected = 0
 
 type Counters struct {
-	InsertCounter     api.Float64Counter
-	FailedCounter     api.Float64Counter
-	SelectDiffCounter api.Float64Counter
-	Ctx               context.Context
-	Opt               api.MeasurementOption
+	InsertCounter       api.Float64Counter
+	FailedCounter       api.Float64Counter
+	InsertDiffCounter   api.Float64Counter
+	SelectDiffCounter   api.Float64Counter
+	SelectCounter       api.Float64Counter
+	SelectFailedCounter api.Float64Counter
+	Ctx                 context.Context
+	Opt                 api.MeasurementOption
 }
 
 func main() {
@@ -61,16 +65,31 @@ func getCounters() Counters {
 	if err != nil {
 		log.Fatal(err)
 	}
+	insertDiffCounter, err := meter.Float64Counter("dataloss_checker_insert_diff", api.WithDescription("insert diff request counter"))
+	if err != nil {
+		log.Fatal(err)
+	}
 	selectDiffCounter, err := meter.Float64Counter("dataloss_checker_select_diff", api.WithDescription("select diff request counter"))
+	if err != nil {
+		log.Fatal(err)
+	}
+	selectCounter, err := meter.Float64Counter("dataloss_checker_select_total", api.WithDescription("select request counter"))
+	if err != nil {
+		log.Fatal(err)
+	}
+	selectFailedCounter, err := meter.Float64Counter("dataloss_checker_select_failed", api.WithDescription("select failed request counter"))
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	insertCounter.Add(ctx, 0.0, opt)
 	failedCounter.Add(ctx, 0.0, opt)
+	insertDiffCounter.Add(ctx, 0.0, opt)
 	selectDiffCounter.Add(ctx, 0.0, opt)
+	selectCounter.Add(ctx, 0, opt)
+	selectFailedCounter.Add(ctx, 0, opt)
 
-	return Counters{insertCounter, failedCounter, selectDiffCounter, ctx, opt}
+	return Counters{insertCounter, failedCounter, insertDiffCounter, selectDiffCounter, selectCounter, selectFailedCounter, ctx, opt}
 }
 
 func getPsqlInfo() string {
@@ -142,29 +161,36 @@ func insertSelectIteration(db *sql.DB, counters Counters) {
 
 	lastWritten := 0
 	err := db.QueryRow("SELECT COALESCE(MAX(mynumber), 0) FROM ledger WHERE myident = $1", myIdent).Scan(&lastWritten)
+	counters.SelectCounter.Add(counters.Ctx, float64(1), counters.Opt)
 	if err != nil {
+		counters.SelectFailedCounter.Add(counters.Ctx, float64(1), counters.Opt)
 		fmt.Println(err)
 		return
 	}
-	if lastWrittenCount > 0 && lastWritten != lastWrittenCount {
-		counters.SelectDiffCounter.Add(counters.Ctx, float64(lastWrittenCount-lastWritten), counters.Opt)
+	if lastWrittenCount > 0 && lastWritten != lastWrittenCount { // data loss
+		counters.InsertDiffCounter.Add(counters.Ctx, float64(lastWrittenCount-lastWritten), counters.Opt)
 	}
-
-	sqlStatement := `
-			INSERT INTO ledger(myident, mynumber, app_insert_timestamp)
-			VALUES ($1, $2, $3)
-		`
-	myCounter += 1
-	err = db.QueryRow(sqlStatement, myIdent, myCounter, time.Now()).Scan()
-	counters.InsertCounter.Add(counters.Ctx, float64(1), counters.Opt)
-	if err != sql.ErrNoRows {
-		counters.FailedCounter.Add(counters.Ctx, float64(1), counters.Opt)
-		log.Println(err)
-		return
-	} else {
-		lastWrittenCount = myCounter
+	if prevSelected > lastWritten { // data loss on replica
+		counters.SelectDiffCounter.Add(counters.Ctx, float64(prevSelected-lastWritten), counters.Opt)
 	}
+	prevSelected = lastWritten
 
+	if os.Getenv("READONLY") != "true" {
+		sqlStatement := `
+				INSERT INTO ledger(myident, mynumber, app_insert_timestamp)
+				VALUES ($1, $2, $3)
+			`
+		myCounter += 1
+		err = db.QueryRow(sqlStatement, myIdent, myCounter, time.Now()).Scan()
+		counters.InsertCounter.Add(counters.Ctx, float64(1), counters.Opt)
+		if err != sql.ErrNoRows {
+			counters.FailedCounter.Add(counters.Ctx, float64(1), counters.Opt)
+			log.Println(err)
+			return
+		} else {
+			lastWrittenCount = myCounter
+		}
+	}
 }
 
 func createTable(psqlInfo string) {

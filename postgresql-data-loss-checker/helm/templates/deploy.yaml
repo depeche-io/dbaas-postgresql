@@ -48,6 +48,8 @@ spec:
               value: single
             - name: SSLMODE
               value: "disable"
+            - name: READONLY
+              value: {{ .Values.readOnly | quote }}
 
 ---
 apiVersion: monitoring.coreos.com/v1
