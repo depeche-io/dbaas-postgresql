@@ -68,6 +68,7 @@ spec:
       releaseName: slave
       values: |
         name: slave
+        readOnly: "true"
         connection:
           host: main-postgresql-read
 

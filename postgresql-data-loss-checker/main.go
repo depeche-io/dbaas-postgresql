@@ -40,7 +40,9 @@ type Counters struct {
 
 func main() {
 	psqlInfo := getPsqlInfo()
-	createTable(psqlInfo)
+	if os.Getenv("READONLY") != "true" {
+		createTable(psqlInfo)
+	}
 
 	counters := getCounters()
 	go serveMetrics()
