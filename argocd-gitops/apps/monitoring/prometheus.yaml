@@ -30,6 +30,15 @@ spec:
                cpu: 2000m
                memory: 2048Mi
 
+            storageSpec:
+              volumeClaimTemplate:
+                spec:
+                  storageClassName: oci-bv
+                  accessModes: ["ReadWriteOnce"]
+                  resources:
+                    requests:
+                      storage: 100Gi
+
         prometheusOperator:
           tls:
             enabled: false
