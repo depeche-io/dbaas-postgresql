@@ -34,6 +34,8 @@ type Counters struct {
 	SelectDiffCounter   api.Float64Counter
 	SelectCounter       api.Float64Counter
 	SelectFailedCounter api.Float64Counter
+	InsertUp            api.Float64Gauge
+	SelectUp            api.Float64Gauge
 	Ctx                 context.Context
 	Opt                 api.MeasurementOption
 }
@@ -83,6 +85,14 @@ func getCounters() Counters {
 	if err != nil {
 		log.Fatal(err)
 	}
+	selectUp, err := meter.Float64Gauge("dataloss_checker_select_success", api.WithDescription("select working"))
+	if err != nil {
+		log.Fatal(err)
+	}
+	insertUp, err := meter.Float64Gauge("dataloss_checker_insert_success", api.WithDescription("insert working"))
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	insertCounter.Add(ctx, 0.0, opt)
 	failedCounter.Add(ctx, 0.0, opt)
@@ -90,8 +100,10 @@ func getCounters() Counters {
 	selectDiffCounter.Add(ctx, 0.0, opt)
 	selectCounter.Add(ctx, 0, opt)
 	selectFailedCounter.Add(ctx, 0, opt)
+	insertUp.Record(ctx, 0, opt)
+	selectUp.Record(ctx, 0, opt)
 
-	return Counters{insertCounter, failedCounter, insertDiffCounter, selectDiffCounter, selectCounter, selectFailedCounter, ctx, opt}
+	return Counters{insertCounter, failedCounter, insertDiffCounter, selectDiffCounter, selectCounter, selectFailedCounter, insertUp, selectUp, ctx, opt}
 }
 
 func getPsqlInfo() string {
@@ -166,8 +178,11 @@ func insertSelectIteration(db *sql.DB, counters Counters) {
 	counters.SelectCounter.Add(counters.Ctx, float64(1), counters.Opt)
 	if err != nil {
 		counters.SelectFailedCounter.Add(counters.Ctx, float64(1), counters.Opt)
+		counters.SelectUp.Record(counters.Ctx, float64(0), counters.Opt)
 		fmt.Println(err)
 		return
+	} else {
+		counters.SelectUp.Record(counters.Ctx, float64(1), counters.Opt)
 	}
 	if lastWrittenCount > 0 && lastWritten != lastWrittenCount { // data loss
 		counters.InsertDiffCounter.Add(counters.Ctx, float64(lastWrittenCount-lastWritten), counters.Opt)
@@ -187,10 +202,12 @@ func insertSelectIteration(db *sql.DB, counters Counters) {
 		counters.InsertCounter.Add(counters.Ctx, float64(1), counters.Opt)
 		if err != sql.ErrNoRows {
 			counters.FailedCounter.Add(counters.Ctx, float64(1), counters.Opt)
+			counters.InsertUp.Record(counters.Ctx, float64(0), counters.Opt)
 			log.Println(err)
 			return
 		} else {
 			lastWrittenCount = myCounter
+			counters.InsertUp.Record(counters.Ctx, float64(1), counters.Opt)
 		}
 	}
 }
