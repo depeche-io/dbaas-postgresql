@@ -11,6 +11,7 @@ spec:
     chart: postgresql
     helm:
       releaseName: main
+      # setting the fixed password was necessary as it kept changing even in the secret
       values: |
         readReplicas.replicaCount: 0
         metrics.enabled: true
