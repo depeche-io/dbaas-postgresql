@@ -143,7 +143,11 @@ func separateConnection(psqlInfo string, counters Counters) {
 	for {
 		db, err := sql.Open("postgres", psqlInfo)
 		if err != nil {
+			counters.SelectUp.Record(counters.Ctx, float64(0), counters.Opt)
+			counters.InsertUp.Record(counters.Ctx, float64(0), counters.Opt)
+
 			log.Println(err)
+			time.Sleep(sleepMillis * time.Millisecond)
 			continue
 		}
 
@@ -161,7 +165,12 @@ func ethernalConnection(psqlInfo string, counters Counters) {
 func singleConnection(psqlInfo string, counters Counters) {
 	db, err := sql.Open("postgres", psqlInfo)
 	if err != nil {
-		panic(err)
+		counters.SelectUp.Record(counters.Ctx, float64(0), counters.Opt)
+		counters.InsertUp.Record(counters.Ctx, float64(0), counters.Opt)
+
+		log.Println(err)
+		time.Sleep(sleepMillis * time.Millisecond)
+		return
 	}
 	defer db.Close()
 
@@ -179,6 +188,7 @@ func insertSelectIteration(db *sql.DB, counters Counters) {
 	if err != nil {
 		counters.SelectFailedCounter.Add(counters.Ctx, float64(1), counters.Opt)
 		counters.SelectUp.Record(counters.Ctx, float64(0), counters.Opt)
+		counters.InsertUp.Record(counters.Ctx, float64(0), counters.Opt)
 		fmt.Println(err)
 		return
 	} else {
