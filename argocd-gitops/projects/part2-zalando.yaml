@@ -23,28 +23,23 @@ spec:
     syncOptions:
       - CreateNamespace=true
 ---
-# FIXME: separate dir for argo to startup
-apiVersion: "acid.zalan.do/v1"
-kind: postgresql
+apiVersion: argoproj.io/v1alpha1
+kind: Application
 metadata:
-  name: zalando
-  namespace: part2-zalando
+  name: part2-zalando
+  namespace: argocd
 spec:
-  teamId: "acid"
-  volume:
-    size: 1Gi
-  numberOfInstances: 2
-  users:
-    # database owner
-    zalando:
-    - superuser
-    - createdb
-
-    # role for application foo
-    app: # or 'foo_user: []'
-
-  #databases: name->owner
-  databases:
-    app: app
-  postgresql:
-    version: "16"
+  project: default
+  source:
+    repoURL: https://github.com/depeche-io/dbaas-postgresql.git
+    targetRevision: main
+    path: apps/part2-zalando
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: part2-zalando
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+    syncOptions:
+      - CreateNamespace=true
