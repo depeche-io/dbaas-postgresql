@@ -26,7 +26,7 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: part2-zalando
+  name: part2-zalando-cluster
   namespace: argocd
 spec:
   project: default
