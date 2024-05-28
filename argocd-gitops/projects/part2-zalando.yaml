@@ -33,7 +33,7 @@ spec:
   source:
     repoURL: https://github.com/depeche-io/dbaas-postgresql.git
     targetRevision: main
-    path: apps/part2-zalando
+    path: argocd-gitops/apps/part2-zalando
   destination:
     server: https://kubernetes.default.svc
     namespace: part2-zalando
