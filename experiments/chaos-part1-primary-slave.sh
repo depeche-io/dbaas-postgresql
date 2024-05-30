@@ -4,30 +4,30 @@ NS=part1-bitnami-primary-slave
 SLEEP=10
 COUNT=2
 
-echo "PART 1 - Primary pod delete"
-
-for i in {1..$COUNT}; do
-    echo "delete Primary $(date)"
-    kubectl delete -n $NS $(kubectl get po -o name -n $NS -l app.kubernetes.io/component=primary)
-    sleep $SLEEP
-done
-
-echo "PART 2 - Slave pod delete"
-
-for i in {1..$COUNT}; do
-    array=()
-    while IFS= read -r line; do
-        array+=( "$line" )
-    done < <( kubectl get po -o name -n $NS -l app.kubernetes.io/component=read )
-
-    size=${#array[@]}
-    index=$(($RANDOM % $size))
-    RANDOM_POD=${array[$index]}
-
-    echo "delete random Slave $(date) $RANDOM_POD"
-    kubectl delete -n $NS $RANDOM_POD
-    sleep $SLEEP
-done
+#echo "PART 1 - Primary pod delete"
+#
+#for i in {1..$COUNT}; do
+#    echo "delete Primary $(date)"
+#    kubectl delete -n $NS $(kubectl get po -o name -n $NS -l app.kubernetes.io/component=primary)
+#    sleep $SLEEP
+#done
+#
+#echo "PART 2 - Slave pod delete"
+#
+#for i in {1..$COUNT}; do
+#    array=()
+#    while IFS= read -r line; do
+#        array+=( "$line" )
+#    done < <( kubectl get po -o name -n $NS -l app.kubernetes.io/component=read )
+#
+#    size=${#array[@]}
+#    index=$(($RANDOM % $size))
+#    RANDOM_POD=${array[$index]}
+#
+#    echo "delete random Slave $(date) $RANDOM_POD"
+#    kubectl delete -n $NS $RANDOM_POD
+#    sleep $SLEEP
+#done
 
 echo "PART 3 - Random PVC delete"
 

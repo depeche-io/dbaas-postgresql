@@ -71,6 +71,7 @@ spec:
       values: |
         name: slave
         readOnly: "true"
+        replicaCount: 3
         auth:
           postgresPassword: secretpassword
         connection:

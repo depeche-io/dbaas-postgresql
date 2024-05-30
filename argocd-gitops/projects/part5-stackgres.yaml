@@ -1,7 +1,7 @@
 # This simply does not work - problem with CRD and replace and also with 'main-init webhook'
 # install as in stone ages:
 #helm repo add stackgres-charts https://stackgres.io/downloads/stackgres-k8s/stackgres/helm/
-#helm install --create-namespace --namespace part5-stackgres-operator stackgres-operator stackgres-charts/stackgres-operator
+#helm upgrade -install --create-namespace --namespace part5-stackgres-operator main stackgres-charts/stackgres-operator
 #apiVersion: argoproj.io/v1alpha1
 #kind: Application
 #metadata:
