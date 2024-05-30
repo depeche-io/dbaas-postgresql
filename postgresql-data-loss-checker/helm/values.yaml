@@ -1,4 +1,4 @@
-tag: v0.1.9
+tag: v0.1.10
 name: first
 replicaCount: 1
 
@@ -6,4 +6,6 @@ readOnly: "false"
 
 connection:
   host: main-postgresql
+  secretName: main-postgresql
+  secretKey: postgres-password
   sslmode: disable

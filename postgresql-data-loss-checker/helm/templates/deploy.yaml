@@ -42,8 +42,8 @@ spec:
             - name: PASSWORD
               valueFrom:
                 secretKeyRef:
-                  key: postgres-password
-                  name: main-postgresql
+                  name: {{ .Values.connection.secretName }}
+                  key: {{ .Values.connection.secretKey | quote }}
             - name: MODE
               value: single
             - name: SSLMODE

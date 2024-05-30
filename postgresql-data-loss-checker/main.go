@@ -19,13 +19,15 @@ import (
 )
 
 const (
-	sleepMillis = 10
+	sleepMillis   = 10
+	maxReconnects = 1000 / 10 * 3 * 60 // around 3 mins
 )
 
 var myIdent = time.Now().UnixNano()
 var myCounter = 0
 var lastWrittenCount = 0
 var prevSelected = 0
+var totalReconnects = 0
 
 type Counters struct {
 	InsertCounter       api.Float64Counter
@@ -148,6 +150,12 @@ func separateConnection(psqlInfo string, counters Counters) {
 
 			log.Println(err)
 			time.Sleep(sleepMillis * time.Millisecond)
+
+			totalReconnects += 1
+			if totalReconnects > maxReconnects {
+				log.Println("Shutting down - password might changed?")
+				os.Exit(1)
+			}
 			continue
 		}
 
@@ -170,6 +178,12 @@ func singleConnection(psqlInfo string, counters Counters) {
 
 		log.Println(err)
 		time.Sleep(sleepMillis * time.Millisecond)
+		totalReconnects += 1
+		if totalReconnects > maxReconnects {
+			log.Println("Shutting down - password might changed?")
+			os.Exit(1)
+		}
+
 		return
 	}
 	defer db.Close()

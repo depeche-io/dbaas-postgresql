@@ -43,3 +43,69 @@ spec:
       prune: true
     syncOptions:
       - CreateNamespace=true
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: part2-zalando-cp
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/depeche-io/dbaas-postgresql.git
+    targetRevision: main
+    path: postgresql-data-loss-checker/helm
+    helm:
+      releaseName: primary
+      values: |
+        name: primary
+        readOnly: "false"
+        replicaCount: 2
+        connection:
+          host: zalando
+          secretName: postgres.zalando.credentials.postgresql.acid.zalan.do
+          secretKey: password
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: part2-zalando
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+    syncOptions:
+      - CreateNamespace=true
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: part2-zalando-cs
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/depeche-io/dbaas-postgresql.git
+    targetRevision: main
+    path: postgresql-data-loss-checker/helm
+    helm:
+      releaseName: slave
+      values: |
+        name: slave
+        readOnly: "true"
+        replicaCount: 4
+        connection:
+          host: zalando
+          secretName: postgres.zalando.credentials.postgresql.acid.zalan.do
+          secretKey: password
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: part2-zalando
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+    syncOptions:
+      - CreateNamespace=true

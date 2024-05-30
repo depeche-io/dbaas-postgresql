@@ -1,3 +1,3 @@
 #!/bin/bash
 
-pack build --publish depecheio/postgresql-data-loss-checker:v0.1.9
+pack build --publish depecheio/postgresql-data-loss-checker:v0.1.10
