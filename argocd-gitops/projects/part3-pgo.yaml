@@ -1,0 +1,45 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: part3-pgo-operator
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: oci://registry.developers.crunchydata.com/crunchydata/
+    targetRevision: 1.11.0
+    chart: pgo
+    helm:
+      releaseName: main
+      values: |
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: part3-pgo-operator
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: part3-pgo-cluster
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/depeche-io/dbaas-postgresql.git
+    targetRevision: main
+    path: argocd-gitops/apps/part3-pgo
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: part3-pgo-cluster
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+    syncOptions:
+      - CreateNamespace=true
