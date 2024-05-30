@@ -66,6 +66,7 @@ spec:
           host: zalando
           secretName: postgres.zalando.credentials.postgresql.acid.zalan.do
           secretKey: password
+          sslmode: ""
 
   destination:
     server: https://kubernetes.default.svc
@@ -99,6 +100,7 @@ spec:
           host: zalando
           secretName: postgres.zalando.credentials.postgresql.acid.zalan.do
           secretKey: password
+          sslmode: ""
 
   destination:
     server: https://kubernetes.default.svc

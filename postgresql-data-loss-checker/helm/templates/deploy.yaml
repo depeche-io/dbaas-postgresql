@@ -47,7 +47,7 @@ spec:
             - name: MODE
               value: single
             - name: SSLMODE
-              value: "disable"
+              value: {{ .Values.connection.sslmode | quote }}
             - name: READONLY
               value: {{ .Values.readOnly | quote }}
 
