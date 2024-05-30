@@ -13,7 +13,7 @@ spec:
       releaseName: main
       values: |
         rbac:
-          create: false
+          create: true
         serviceAccount:
           create: true
 
