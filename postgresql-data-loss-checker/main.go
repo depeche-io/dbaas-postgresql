@@ -120,7 +120,7 @@ func getPsqlInfo() string {
 		sslmode = "sslmode=" + sslmode
 	}
 
-	result := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s %s", host, port, user, password, dbname, sslmode)
+	result := fmt.Sprintf("host=%s port=%d user=%s password=%s connect_timeout=5 dbname=%s %s", host, port, user, password, dbname, sslmode)
 	log.Println("Connecting to " + result)
 	return result
 }
