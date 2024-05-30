@@ -1,0 +1,45 @@
+apiVersion: stackgres.io/v1
+kind: SGInstanceProfile
+metadata:
+  namespace: my-cluster
+  name: size-small
+spec:
+  cpu: "2"
+  memory: "4Gi"
+---
+
+apiVersion: stackgres.io/v1
+kind: SGPostgresConfig
+metadata:
+  namespace: my-cluster
+  name: pgconfig1
+spec:
+  postgresVersion: "12"
+  postgresql.conf:
+    shared_buffers: '512MB'
+    random_page_cost: '1.5'
+    password_encryption: 'scram-sha-256'
+    log_checkpoints: 'on'
+
+---
+
+apiVersion: stackgres.io/v1
+kind: SGCluster
+metadata:
+  namespace: my-cluster
+  name: cluster
+spec:
+  postgres:
+    version: '16.1'
+  instances: 3
+  sgInstanceProfile: 'size-small'
+  pods:
+    persistentVolume:
+      size: '10Gi'
+  configurations:
+    sgPostgresConfig: 'pgconfig1'
+    #backups:
+    #- sgObjectStorage: 'backupconfig1'
+    #  cronSchedule: '*/5 * * * *'
+    #  retention: 6
+  prometheusAutobind: true
