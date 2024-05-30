@@ -1,0 +1,46 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: part4-cnpg-operator
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://cloudnative-pg.github.io/charts
+    targetRevision: 0.21.2
+    chart: cloudnative-pg
+    helm:
+      releaseName: main
+      values: |
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: part4-cnpg-operator
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+    syncOptions:
+      - CreateNamespace=true
+      - Replace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: part4-cnpg-cluster
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/depeche-io/dbaas-postgresql.git
+    targetRevision: main
+    path: argocd-gitops/apps/part4-cnpg
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: part4-cnpg-cluster
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+    syncOptions:
+      - CreateNamespace=true
