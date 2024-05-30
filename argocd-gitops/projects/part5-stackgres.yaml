@@ -12,8 +12,6 @@ spec:
     helm:
       releaseName: main
       values: |
-        rbac:
-          create: true
         serviceAccount:
           create: true
 
