@@ -14,6 +14,8 @@ spec:
       values: |
         rbac:
           create: false
+        serviceAccount:
+          create: false
 
   destination:
     server: https://kubernetes.default.svc
