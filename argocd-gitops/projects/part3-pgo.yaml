@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: registry.developers.crunchydata.com/crunchydata/
+    repoURL: registry.developers.crunchydata.com/crunchydata
     targetRevision: 5.5.2
     chart: pgo
     helm:
