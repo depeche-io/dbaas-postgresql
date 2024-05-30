@@ -6,9 +6,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: oci://registry.developers.crunchydata.com/
+    repoURL: registry.developers.crunchydata.com/crunchydata/pgo
     targetRevision: 5.5.2
-    chart: crunchydata/pgo
+    chart: pgo
     helm:
       releaseName: main
       values: |
