@@ -75,7 +75,7 @@ spec:
           secretKey: superuser-password
           user: postgres
           dbname: postgres
-          sslmode: ""
+          sslmode: disable
   destination:
     server: https://kubernetes.default.svc
     namespace: part5-stackgres-cluster
@@ -110,7 +110,7 @@ spec:
           secretKey: superuser-password
           user: postgres
           dbname: postgres
-          sslmode: ""
+          sslmode: disable
   destination:
     server: https://kubernetes.default.svc
     namespace: part5-stackgres-cluster
