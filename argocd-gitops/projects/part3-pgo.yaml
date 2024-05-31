@@ -72,7 +72,7 @@ spec:
           sslmode: ""
   destination:
     server: https://kubernetes.default.svc
-    namespace: part3-pgo
+    namespace: part3-pgo-cluster
   syncPolicy:
     automated:
       selfHeal: true
@@ -107,7 +107,7 @@ spec:
           sslmode: ""
   destination:
     server: https://kubernetes.default.svc
-    namespace: part3-pgo
+    namespace: part3-pgo-cluster
   syncPolicy:
     automated:
       selfHeal: true
