@@ -34,9 +34,9 @@ spec:
             - name: HOST
               value: {{ .Values.connection.host }}
             - name: USER
-              value: postgres
+              value: {{ .Values.connection.user }}
             - name: DBNAME
-              value: postgres
+              value: {{ .Values.connection.dbname }}
             - name: PORT
               value: "5432"
             - name: PASSWORD

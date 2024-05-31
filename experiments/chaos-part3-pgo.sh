@@ -1,8 +1,9 @@
 #!/bin/bash
 
-NS=part2-zalando
+NS=part3-pgo
 SLEEP=120
-COUNT="1 2 3 4 5"
+#COUNT="1 2 3 4 5"
+COUNT="1"
 
 echo "PART 1 - Primary pod delete"
 

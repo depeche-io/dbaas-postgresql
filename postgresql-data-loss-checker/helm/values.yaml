@@ -8,4 +8,6 @@ connection:
   host: main-postgresql
   secretName: main-postgresql
   secretKey: postgres-password
+  user: postgres
+  dbname: postgres
   sslmode: disable

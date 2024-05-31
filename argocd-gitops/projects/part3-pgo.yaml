@@ -44,3 +44,73 @@ spec:
       prune: true
     syncOptions:
       - CreateNamespace=true
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: part3-pgo-cp
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/depeche-io/dbaas-postgresql.git
+    targetRevision: main
+    path: postgresql-data-loss-checker/helm
+    helm:
+      releaseName: primary
+      values: |
+        name: primary
+        readOnly: "false"
+        replicaCount: 2
+        connection:
+          host: hippo-primary
+          secretName: hippo-pguser-hippo
+          secretKey: password
+          user: hippo
+          dbname: hippo
+          sslmode: ""
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: part3-pgo
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+    syncOptions:
+      - CreateNamespace=true
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: part3-pgo-cs
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/depeche-io/dbaas-postgresql.git
+    targetRevision: main
+    path: postgresql-data-loss-checker/helm
+    helm:
+      releaseName: slave
+      values: |
+        name: slave
+        readOnly: "true"
+        replicaCount: 4
+        connection:
+          host: hippo-replicas
+          secretName: hippo-pguser-hippo
+          secretKey: password
+          user: hippo
+          dbname: hippo
+          sslmode: ""
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: part3-pgo
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+    syncOptions:
+      - CreateNamespace=true
