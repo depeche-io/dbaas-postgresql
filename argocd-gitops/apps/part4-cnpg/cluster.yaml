@@ -6,3 +6,12 @@ spec:
   instances: 3
   storage:
     size: 1Gi
+  backup:
+    barmanObjectStore:
+      s3Credentials:
+        accessKeyId:
+          key: accessKeyId
+          name: oci-s3-credentials
+        secretAccessKey:
+          key: secretAccessKey
+          name: oci-s3-credentials

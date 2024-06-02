@@ -10,10 +10,10 @@ LABEL_MASTER=postgres-operator.crunchydata.com/role=master
 LABEL_REPLICA=postgres-operator.crunchydata.com/role=replica 
 
 
-PrimaryPodDelete 
-
-ReplicaPodDelete
+#PrimaryPodDelete 
+#
+#ReplicaPodDelete
+#
+#PatroniSwitchOver
 
 RandomPvcDelete
-
-PatroniSwitchOver

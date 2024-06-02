@@ -10,13 +10,11 @@ LABEL_MASTER=role=primary
 LABEL_REPLICA=role=replica
 
 
-PrimaryPodDelete 
+#PrimaryPodDelete 
+#
+#ReplicaPodDelete
 
-ReplicaPodDelete
-
-RandomPvcDelete
-
-echo "Part 4 - Promote replica to primary"
+echo "Part 3 - Promote replica to primary"
 
 for i in $COUNT; do
     array=()
@@ -32,3 +30,5 @@ for i in $COUNT; do
     kubectl cnpg promote -n $NS  mycnpg $RANDOM_POD
     sleep $SLEEP
 done
+
+RandomPvcDelete

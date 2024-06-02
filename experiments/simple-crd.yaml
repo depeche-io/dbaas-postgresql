@@ -1,0 +1,10 @@
+apiVersion: mycompany.crossplane/v1
+kind: PostgresqlCluster
+metadata:
+  name: my-cluster
+spec:
+  instances: 3
+  prefer: availability | consistency
+  shape: 2cpu-16ram
+  storage:
+    size: 100Gi

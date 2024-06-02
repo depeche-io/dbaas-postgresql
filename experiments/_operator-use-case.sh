@@ -30,7 +30,7 @@ function ReplicaPodDelete {
 }
 
 function RandomPvcDelete {
-    echo "PART 3 - Random PVC delete"
+    echo "PART 4 - Random PVC delete"
 
     for i in $COUNT; do
         array=()
@@ -54,7 +54,7 @@ function RandomPvcDelete {
 }
 
 function PatroniSwitchOver {
-    echo "PART 4 - Switchover"
+    echo "PART 3 - Switchover"
 
     for i in $COUNT ; do
         echo Switch over $(date)
