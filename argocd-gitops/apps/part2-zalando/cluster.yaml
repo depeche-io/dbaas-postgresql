@@ -7,7 +7,7 @@ spec:
   teamId: "acid"
   volume:
     size: 1Gi
-  numberOfInstances: 3
+  numberOfInstances: 5
   users:
     # database owner
     zalando:
