@@ -16,10 +16,12 @@ spec:
 
     # role for application foo
     app: # or 'foo_user: []'
+    second:
 
   #databases: name->owner
   databases:
     app: app
+    second: second
   postgresql:
     version: "16"
 ---
@@ -31,3 +33,4 @@ metadata:
 data:
   pod_environment_configmap: "part2-zalando/pod-config"
 ---
+# config file with password is outside git
