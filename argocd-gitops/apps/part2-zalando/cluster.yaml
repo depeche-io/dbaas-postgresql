@@ -22,3 +22,12 @@ spec:
     app: app
   postgresql:
     version: "16"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-operator
+  namespace: part2-zalando
+data:
+  pod_environment_configmap: "part2-zalando/pod-config"
+---

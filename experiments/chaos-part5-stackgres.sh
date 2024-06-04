@@ -12,7 +12,7 @@ LABEL_REPLICA=role=replica
 
 #PrimaryPodDelete 
 
-ReplicaPodDelete
+#ReplicaPodDelete
 
 PatroniSwitchOver
 
