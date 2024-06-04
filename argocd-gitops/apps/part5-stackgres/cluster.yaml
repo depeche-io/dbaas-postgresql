@@ -35,8 +35,29 @@ spec:
       size: '10Gi'
   configurations:
     sgPostgresConfig: 'pgconfig1'
-    #backups:
-    #- sgObjectStorage: 'backupconfig1'
-    #  cronSchedule: '*/5 * * * *'
-    #  retention: 6
+    backups:
+    - sgObjectStorage: 'backupconfig1'
+      cronSchedule: '*/5 * * * *'
+      retention: 6
   prometheusAutobind: true
+---
+apiVersion: stackgres.io/v1beta1
+kind: SGObjectStorage
+metadata:
+  name: backupconfig1
+spec:
+  type: s3Compatible
+  storage:
+    s3Compatible:
+      bucket: bucket-20240602-2126 
+      region: k8s
+      enablePathStyleAddressing: true
+      endpoint: "https://fradozn9lozb.compat.objectstorage.eu-frankfurt-1.oraclecloud.com"
+      awsCredentials:
+        secretKeySelectors:
+          accessKeyId:
+            key: accessKeyId
+            name: oci-s3-credentials
+          secretAccessKey:
+            key: secretAccessKey
+            name: oci-s3-credentials
