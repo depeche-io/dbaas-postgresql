@@ -17,6 +17,7 @@ spec:
     # role for application foo
     app: # or 'foo_user: []'
     second:
+    - superuser
 
   #databases: name->owner
   databases:
