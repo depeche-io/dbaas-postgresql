@@ -33,7 +33,7 @@ spec:
         repo1-s3-uri-style: path
       image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.51-0
       repos:
-      - name: repo-s3
+      - name: repos3
         s3:
           bucket: "bucket-20240602-2126"
           endpoint: "https://fradozn9lozb.compat.objectstorage.eu-frankfurt-1.oraclecloud.com"
