@@ -20,20 +20,6 @@ spec:
         resources:
           requests:
             storage: 1Gi
-    - name: instance3
-      dataVolumeClaimSpec:
-        accessModes:
-        - "ReadWriteOnce"
-        resources:
-          requests:
-            storage: 1Gi
-    - name: instance4
-      dataVolumeClaimSpec:
-        accessModes:
-        - "ReadWriteOnce"
-        resources:
-          requests:
-            storage: 1Gi
     - name: instance5
       dataVolumeClaimSpec:
         accessModes:
