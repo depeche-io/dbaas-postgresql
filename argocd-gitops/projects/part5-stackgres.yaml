@@ -2,6 +2,29 @@
 # install as in stone ages:
 #helm repo add stackgres-charts https://stackgres.io/downloads/stackgres-k8s/stackgres/helm/
 #helm upgrade -install --create-namespace --namespace part5-stackgres-operator main stackgres-charts/stackgres-operator
+# rendered here:
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: part5-stackgres-operator
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/depeche-io/dbaas-postgresql.git
+    targetRevision: main
+    path: argocd-gitops/apps/part5-stackgres-operator
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: part5-stackgres-operator
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+    syncOptions:
+      - CreateNamespace=true
+---
 #apiVersion: argoproj.io/v1alpha1
 #kind: Application
 #metadata:
