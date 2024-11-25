@@ -13,23 +13,20 @@ spec:
     chart: kube-prometheus-stack
     helm:
       releaseName: prometheus
-      values: |
+      valuesObject:
         alertmanager:
           enabled: true
-
         grafana:
           enabled: true
-
         prometheus:
           prometheusSpec:
-            resources:
-             limits:
-               cpu: 2000m
-               memory: 2048Mi
-             requests:
-               cpu: 2000m
-               memory: 2048Mi
-
+            #resources:
+            # limits:
+            #   cpu: 2000m
+            #   memory: 2048Mi
+            # requests:
+            #   cpu: 2000m
+            #   memory: 2048Mi
             storageSpec:
               volumeClaimTemplate:
                 spec:
@@ -38,7 +35,6 @@ spec:
                   resources:
                     requests:
                       storage: 100Gi
-
         prometheusOperator:
           tls:
             enabled: false
