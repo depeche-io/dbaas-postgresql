@@ -9,7 +9,7 @@ spec:
   backup:
     barmanObjectStore:
       endpointURL: "https://fradozn9lozb.compat.objectstorage.eu-frankfurt-1.oraclecloud.com"
-      destinationPath: s3://bucket-20240602-2126/part4-cnpg
+      destinationPath: s3://bucket-20240602-2126/part4-cnpg2
       serverName: mycpng
       s3Credentials:
         accessKeyId:
