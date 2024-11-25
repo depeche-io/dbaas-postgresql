@@ -7,12 +7,11 @@ spec:
   project: default
   source:
     repoURL: https://opensource.zalando.com/postgres-operator/charts/postgres-operator
-    targetRevision: 1.11.0
+    targetRevision: 1.13.0
     chart: postgres-operator
     helm:
       releaseName: main
-      values: |
-
+      valuesObject:
   destination:
     server: https://kubernetes.default.svc
     namespace: part2-zalando
@@ -43,7 +42,6 @@ spec:
       prune: true
     syncOptions:
       - CreateNamespace=true
-
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -58,7 +56,7 @@ spec:
     path: postgresql-data-loss-checker/helm
     helm:
       releaseName: primary
-      values: |
+      valuesObject:
         name: primary
         readOnly: "false"
         replicaCount: 2
@@ -92,7 +90,7 @@ spec:
     path: postgresql-data-loss-checker/helm
     helm:
       releaseName: slave
-      values: |
+      valuesObject:
         name: slave
         readOnly: "true"
         replicaCount: 4
@@ -101,7 +99,6 @@ spec:
           secretName: postgres.zalando.credentials.postgresql.acid.zalan.do
           secretKey: password
           sslmode: ""
-
   destination:
     server: https://kubernetes.default.svc
     namespace: part2-zalando
