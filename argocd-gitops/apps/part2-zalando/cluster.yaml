@@ -1,3 +1,4 @@
+---
 apiVersion: "acid.zalan.do/v1"
 kind: postgresql
 metadata:
@@ -11,13 +12,13 @@ spec:
   users:
     # database owner
     zalando:
-    - superuser
-    - createdb
+      - superuser
+      - createdb
 
     # role for application foo
     app: # or 'foo_user: []'
     second:
-    - superuser
+      - superuser
 
   #databases: name->owner
   databases:
@@ -26,18 +27,18 @@ spec:
   postgresql:
     version: "16"
   env:
-  - name: AWS_ENDPOINT
-    value: my-custom-bucket
-  - name: AWS_REGION
-    value: eu-frankfurt-1
-  - name: WALE_S3_PREFIX
-    value: part2-zalando
-  - name: AWS_ACCESS_KEY_ID
+    - name: AWS_ENDPOINT
+      value: my-custom-bucket
+    - name: AWS_REGION
+      value: eu-frankfurt-1
+    - name: WALE_S3_PREFIX
+      value: part2-zalando
+    - name: AWS_ACCESS_KEY_ID
       valueFrom:
         secretKeyRef:
           name: oci-s3-credentials
           key: accessKeyId
-  - name: AWS_SECRET_ACCESS_KEY
+    - name: AWS_SECRET_ACCESS_KEY
       valueFrom:
         secretKeyRef:
           name: oci-s3-credentials
