@@ -49,7 +49,7 @@ spec:
   type: s3Compatible
   s3Compatible:
     bucket: bucket-20240602-2126 
-    region: k8s
+    region: eu-frankfurt-1
     enablePathStyleAddressing: true
     endpoint: "https://fradozn9lozb.compat.objectstorage.eu-frankfurt-1.oraclecloud.com"
     awsCredentials:
