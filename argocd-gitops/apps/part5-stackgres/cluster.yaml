@@ -28,7 +28,7 @@ metadata:
 spec:
   postgres:
     version: '16.1'
-  instances: 5
+  instances: 2
   sgInstanceProfile: 'size-small'
   pods:
     persistentVolume:
