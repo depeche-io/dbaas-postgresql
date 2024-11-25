@@ -5,7 +5,7 @@ metadata:
 spec:
   # !!! This is completely wrong - use of the Deployment will boot 3 different containers with the same shared ./pgdata dir
   # so you have 3 completely separate Postgres processes writing over each other. Probably corrupting data in the first minute.
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: postgres
