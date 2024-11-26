@@ -25,4 +25,4 @@ spec:
     app: app
     third: third
   postgresql:
-    version: "15"
+    version: "16"
