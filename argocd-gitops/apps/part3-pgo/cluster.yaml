@@ -27,6 +27,13 @@ spec:
         resources:
           requests:
             storage: 1Gi
+    - name: instance6
+      dataVolumeClaimSpec:
+        accessModes:
+        - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: 1Gi
   backups:
     pgbackrest:
       global:
