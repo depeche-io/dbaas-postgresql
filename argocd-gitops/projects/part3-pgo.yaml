@@ -7,12 +7,11 @@ spec:
   project: default
   source:
     repoURL: registry.developers.crunchydata.com/crunchydata
-    targetRevision: 5.5.2
+    targetRevision: 5.7.1
     chart: pgo
     helm:
       releaseName: main
-      values: |
-
+      valuesObject:
   destination:
     server: https://kubernetes.default.svc
     namespace: part3-pgo-operator
